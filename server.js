@@ -1,0 +1,25 @@
+const express = require("express");
+const cors = require("cors");
+
+// Calls the express function to start a new Express application
+const app = express();
+
+// ---------- Middleware ----------
+// Middleware runs from top to bottom, in the order it is added with app.use
+
+// Lets a page from another address (GitHub Pages) call this server
+app.use(cors());
+
+// Turns the JSON text in a POST or PUT request into the object request.body
+app.use(express.json());
+
+// Anything that reached this point matched nothing above
+app.use(function (request, response) {
+    response.status(404).send("Page not found!");
+});
+
+// Render chooses the port and passes it in process.env.PORT; 3000 is for running locally
+const port = process.env.PORT || 3000;
+app.listen(port, function () {
+    console.log("App started on port " + port);
+});
