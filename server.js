@@ -13,6 +13,15 @@ app.use(cors());
 // Turns the JSON text in a POST or PUT request into the object request.body
 app.use(express.json());
 
+// Logger: prints every request to the console (and so to the Render log)
+app.use(function (request, response, next) {
+    console.log(new Date().toISOString() + " " + request.method + " " + request.url);
+    if (request.method === "POST" || request.method === "PUT") {
+        console.log("Body: " + JSON.stringify(request.body));
+    }
+    next(); // pass the request on to the next middleware, or it would hang here
+});
+
 // Anything that reached this point matched nothing above
 app.use(function (request, response) {
     response.status(404).send("Page not found!");
