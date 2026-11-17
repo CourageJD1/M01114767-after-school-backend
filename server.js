@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 
 // Calls the express function to start a new Express application
 const app = express();
@@ -20,6 +21,15 @@ app.use(function (request, response, next) {
         console.log("Body: " + JSON.stringify(request.body));
     }
     next(); // pass the request on to the next middleware, or it would hang here
+});
+
+// Static files: /images/maths.jpg returns the file images/maths.jpg
+const imagePath = path.resolve(__dirname, "images");
+app.use("/images", express.static(imagePath));
+
+// Only reached when express.static did not find the file
+app.use("/images", function (request, response) {
+    response.status(404).send("Image not found!");
 });
 
 // Anything that reached this point matched nothing above
